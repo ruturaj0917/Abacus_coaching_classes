@@ -29,24 +29,6 @@ export async function POST(req: Request) {
     const accuracy = (marks / totalQs) * 100;
     const latest_test_score = accuracy;
 
-    // Fetch past
-    const pastResults = await prisma.testResult.findMany({
-      where: { studentId: session.userId }
-    });
-
-    let totalPercentageSum = 0;
-    for (const pr of pastResults) {
-      totalPercentageSum += pr.accuracy; // assuming accuracy saved matches test score normalisation
-    }
-
-    // Add current
-    totalPercentageSum += latest_test_score;
-    const n = pastResults.length + 1;
-    const average_marks = totalPercentageSum / n;
-
-    // Formula
-    const rankingScore = (0.6 * average_marks) + (0.4 * latest_test_score);
-
     // Save Result
     await prisma.testResult.create({
       data: {
@@ -58,14 +40,34 @@ export async function POST(req: Request) {
       }
     });
 
-    // Update the student's personal ranking score only.
-    // Dynamic ranking will be calculated on-the-fly in the dashboard.
+    // Fetch ALL results for this student to calculate the new average based on LATEST attempts per test
+    const allResults = await prisma.testResult.findMany({
+      where: { studentId: session.userId },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    // Filter to keep only the most recent accuracy for each unique test
+    const latestPerTest = new Map<string, number>();
+    for (const res of allResults) {
+      if (!latestPerTest.has(res.testId)) {
+        latestPerTest.set(res.testId, res.accuracy);
+      }
+    }
+
+    // Calculate Average Marks based on the latest attempt of every test taken
+    const totalAccuracySum = Array.from(latestPerTest.values()).reduce((sum, acc) => sum + acc, 0);
+    const average_marks = totalAccuracySum / latestPerTest.size;
+
+    // Formula: (60% weight on total average + 40% weight on latest test performance)
+    const rankingScore = (0.6 * average_marks) + (0.4 * latest_test_score);
+
+    // Update the student's personal ranking score
     await prisma.user.update({
       where: { id: session.userId },
       data: { rankingScore }
     });
 
-    return NextResponse.json({ success: true, marks, accuracy, rankingScore });
+    return NextResponse.json({ success: true, marks, accuracy: latest_test_score, rankingScore });
 
   } catch (err) {
     console.error(err);

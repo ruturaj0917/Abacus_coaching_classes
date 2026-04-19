@@ -89,19 +89,22 @@ export default async function AvailableTests() {
                   </div>
                 </CardContent>
                 <CardFooter className="pt-0">
-                  {isTaken ? (
-                    <div className="flex items-center gap-2 text-emerald-400 font-semibold text-sm w-full">
-                      <CheckCircle2 className="w-4 h-4" />
-                      Completed
-                    </div>
-                  ) : (
-                    <Link href={`/student/tests/${t.id}`} className="w-full">
-                      <Button className="w-full gradient-brand hover:opacity-90 border-0 text-white font-semibold">
-                        <PlayCircle className="w-4 h-4 mr-2" />
-                        Start Test
-                      </Button>
-                    </Link>
-                  )}
+                  <Link href={`/student/tests/${t.id}`} className="w-full">
+                    <Button 
+                      variant={isTaken ? "outline" : "default"}
+                      className={cn(
+                        "w-full font-semibold h-11 transition-all duration-200",
+                        !isTaken && "gradient-brand hover:opacity-90 border-0 text-white shadow-lg shadow-primary/20",
+                        isTaken && "border-primary/20 hover:bg-primary/5 hover:border-primary/40 text-primary"
+                      )}
+                    >
+                      {isTaken ? (
+                        <><History className="w-4 h-4 mr-2" /> Retake Test</>
+                      ) : (
+                        <><PlayCircle className="w-4 h-4 mr-2" /> Start Test</>
+                      )}
+                    </Button>
+                  </Link>
                 </CardFooter>
               </Card>
             );

@@ -20,17 +20,8 @@ export default async function TestPage({ params }: { params: Promise<{ id: strin
 
   if (!test) redirect('/student/tests');
 
-  // Verify if already taken
-  const existingResult = await prisma.testResult.findFirst({
-    where: { testId, studentId: session.userId }
-  });
-
-  if (existingResult) {
-    redirect('/student/dashboard');
-  }
-
   return (
-    <div style={{ padding: '2rem 0' }}>
+    <div className="py-8 md:py-12">
       <TestClient test={test} questions={test.questions} />
     </div>
   );
