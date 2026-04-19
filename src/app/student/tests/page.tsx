@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Clock, FileQuestion, PlayCircle } from "lucide-react";
+import { CheckCircle2, Clock, FileQuestion, PlayCircle, History } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default async function AvailableTests() {
   const session = await getSession();
