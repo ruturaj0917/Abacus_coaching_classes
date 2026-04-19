@@ -38,8 +38,8 @@ export async function POST(request: Request) {
       message: 'Registered successfully',
       user: { id: user.id, email: user.email, role: user.role, name: user.name }
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Register error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: 'Internal server error', details: error.message || String(error) }, { status: 500 });
   }
 }
