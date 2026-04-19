@@ -50,7 +50,8 @@ export default async function AdminDashboard() {
         </div>
       </CardHeader>
       <CardContent className="p-0">
-        <Table>
+        <div className="overflow-x-auto">
+          <Table>
           <TableHeader>
             <TableRow className="border-border/50 hover:bg-transparent">
               <TableHead className="pl-6">#</TableHead>
@@ -85,6 +86,7 @@ export default async function AdminDashboard() {
             )}
           </TableBody>
         </Table>
+        </div>
       </CardContent>
     </Card>
   );
