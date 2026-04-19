@@ -1,6 +1,8 @@
-"use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function TestClient({ test, questions }: { test: any, questions: any[] }) {
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -46,6 +48,14 @@ export default function TestClient({ test, questions }: { test: any, questions: 
 
   const handleSubmit = async (finalAnswers = answers, finalTime = timeLeft) => {
     if (submitting) return;
+
+    // Add confirmation if submitting manually
+    if (finalTime > 0) {
+      if (!window.confirm("Are you sure you want to end the test now? Your progress will be saved and the test will be closed.")) {
+        return;
+      }
+    }
+
     setSubmitting(true);
     try {
       const res = await fetch('/api/student/tests/submit', {
@@ -149,9 +159,13 @@ export default function TestClient({ test, questions }: { test: any, questions: 
             variant="destructive"
             onClick={() => handleSubmit()}
             disabled={submitting}
-            className="flex-1 sm:flex-none h-11 md:h-12 px-6 md:px-8 font-bold shadow-lg shadow-destructive/20"
+            className="flex-1 sm:flex-none h-11 md:h-12 px-6 md:px-8 font-bold shadow-lg shadow-destructive/20 min-w-[120px]"
           >
-            {submitting ? 'Submitting...' : 'End Test'}
+            {submitting ? (
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Saving...</>
+            ) : (
+              'End Test'
+            )}
           </Button>
 
           <Button 

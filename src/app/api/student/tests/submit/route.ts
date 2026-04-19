@@ -58,35 +58,12 @@ export async function POST(req: Request) {
       }
     });
 
-    // Update Score
-    const user = await prisma.user.update({
+    // Update the student's personal ranking score only.
+    // Dynamic ranking will be calculated on-the-fly in the dashboard.
+    await prisma.user.update({
       where: { id: session.userId },
       data: { rankingScore }
     });
-
-    // Update Global Rank
-    const allUsers = await prisma.user.findMany({ where: { role: 'STUDENT' }, orderBy: { rankingScore: 'desc' }});
-    let tx = [];
-    for (let i = 0; i < allUsers.length; i++) {
-        tx.push(prisma.user.update({ where: { id: allUsers[i].id }, data: { globalRank: i + 1 } }));
-    }
-    await prisma.$transaction(tx);
-
-    // Update Class Rank
-    const classUsers = await prisma.user.findMany({ where: { role: 'STUDENT', classType: user.classType }, orderBy: { rankingScore: 'desc' }});
-    tx = [];
-    for (let i = 0; i < classUsers.length; i++) {
-        tx.push(prisma.user.update({ where: { id: classUsers[i].id }, data: { classRank: i + 1 } }));
-    }
-    await prisma.$transaction(tx);
-
-    // Update Level Rank
-    const levelUsers = await prisma.user.findMany({ where: { role: 'STUDENT', classType: user.classType, level: user.level }, orderBy: { rankingScore: 'desc' }});
-    tx = [];
-    for (let i = 0; i < levelUsers.length; i++) {
-        tx.push(prisma.user.update({ where: { id: levelUsers[i].id }, data: { levelRank: i + 1 } }));
-    }
-    await prisma.$transaction(tx);
 
     return NextResponse.json({ success: true, marks, accuracy, rankingScore });
 

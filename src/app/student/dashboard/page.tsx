@@ -22,11 +22,26 @@ export default async function StudentDashboard() {
   });
 
   if (!user) redirect('/login');
+  
+  // Calculate Ranks Dynamically
+  const currentScore = user.rankingScore ?? 0;
+  
+  const globalRank = (await prisma.user.count({ 
+    where: { role: 'STUDENT', rankingScore: { gt: currentScore } } 
+  })) + 1;
+  
+  const classRank = (await prisma.user.count({ 
+    where: { role: 'STUDENT', classType: user.classType!, rankingScore: { gt: currentScore } } 
+  })) + 1;
+  
+  const levelRank = (await prisma.user.count({ 
+    where: { role: 'STUDENT', classType: user.classType!, level: user.level!, rankingScore: { gt: currentScore } } 
+  })) + 1;
 
   const stats = [
     {
       label: "Global Rank",
-      value: user.globalRank ? `#${user.globalRank}` : "—",
+      value: currentScore > 0 ? `#${globalRank}` : "—",
       icon: Trophy,
       color: "text-amber-400",
       bg: "bg-amber-400/10",
@@ -34,7 +49,7 @@ export default async function StudentDashboard() {
     },
     {
       label: "Class Rank",
-      value: user.classRank ? `#${user.classRank}` : "—",
+      value: currentScore > 0 ? `#${classRank}` : "—",
       icon: Star,
       color: "text-violet-400",
       bg: "bg-violet-400/10",
@@ -42,7 +57,7 @@ export default async function StudentDashboard() {
     },
     {
       label: "Level Rank",
-      value: user.levelRank ? `#${user.levelRank}` : "—",
+      value: currentScore > 0 ? `#${levelRank}` : "—",
       icon: Target,
       color: "text-blue-400",
       bg: "bg-blue-400/10",
