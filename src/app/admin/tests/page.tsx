@@ -153,45 +153,47 @@ export default function AdminTests() {
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-border/50 hover:bg-transparent">
-                  <TableHead className="pl-6">Title</TableHead>
-                  <TableHead>Class</TableHead>
-                  <TableHead>Level</TableHead>
-                  <TableHead className="pr-6 text-right">Time</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {tests.map(t => (
-                  <TableRow key={t.id} className="border-border/30 hover:bg-secondary/30">
-                    <TableCell className="pl-6 font-medium">{t.title}</TableCell>
-                    <TableCell>
-                      <Badge variant={t.classType === 'ABACUS' ? "info" : "success"}>
-                        {t.classType.replace("_", " ")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">Level {t.level}</Badge>
-                    </TableCell>
-                    <TableCell className="pr-6 text-right">
-                      <div className="flex items-center justify-end gap-1 text-muted-foreground text-sm">
-                        <Clock className="w-3.5 h-3.5" />
-                        {t.timeLimit}m
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="border-border/50 hover:bg-transparent">
+                    <TableHead className="pl-6">Title</TableHead>
+                    <TableHead>Class</TableHead>
+                    <TableHead>Level</TableHead>
+                    <TableHead className="pr-6 text-right">Time</TableHead>
                   </TableRow>
-                ))}
-                {tests.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
-                      <GraduationCap className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                      <p>No tests created yet. Create your first test!</p>
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {tests.map(t => (
+                    <TableRow key={t.id} className="border-border/30 hover:bg-secondary/30">
+                      <TableCell className="pl-6 font-medium">{t.title}</TableCell>
+                      <TableCell>
+                        <Badge variant={t.classType === 'ABACUS' ? "info" : "success"}>
+                          {t.classType.replace("_", " ")}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">Level {t.level}</Badge>
+                      </TableCell>
+                      <TableCell className="pr-6 text-right">
+                        <div className="flex items-center justify-end gap-1 text-muted-foreground text-sm">
+                          <Clock className="w-3.5 h-3.5" />
+                          {t.timeLimit}m
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {tests.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center py-12 text-muted-foreground">
+                        <GraduationCap className="w-10 h-10 mx-auto mb-3 opacity-30" />
+                        <p>No tests created yet. Create your first test!</p>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -80,13 +80,13 @@ export default function RegisterPage() {
             <span className="font-bold text-lg text-foreground">Gururaj Coaching Classes</span>
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Create account</h2>
-            <p className="text-muted-foreground">Join the academy and start learning today</p>
+          <div className="mb-6 md:mb-8 text-center lg:text-left">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Create account</h2>
+            <p className="text-muted-foreground text-sm md:text-base">Join the academy and start learning today</p>
           </div>
 
-          <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-2xl">
-            <CardContent className="pt-6">
+          <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-2xl overflow-hidden">
+            <CardContent className="pt-6 p-4 md:p-6">
               <form onSubmit={handleRegister} className="space-y-5">
                 {error && (
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
@@ -143,13 +143,13 @@ export default function RegisterPage() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label className="text-foreground/80">Class Type</Label>
                     <select
                       value={formData.classType}
                       onChange={(e) => setFormData({ ...formData, classType: e.target.value })}
-                      className="flex h-10 w-full rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm text-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      className="flex h-11 w-full rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm text-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
                     >
                       <option value="ABACUS">Abacus</option>
                       <option value="VEDIC_MATHS">Vedic Maths</option>
@@ -160,7 +160,7 @@ export default function RegisterPage() {
                     <select
                       value={formData.level}
                       onChange={(e) => setFormData({ ...formData, level: e.target.value })}
-                      className="flex h-10 w-full rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm text-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      className="flex h-11 w-full rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm text-foreground ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 appearance-none cursor-pointer"
                     >
                       {[0, 1, 2, 3, 4, 5].map(lvl => (
                         <option key={lvl} value={lvl}>Level {lvl}</option>

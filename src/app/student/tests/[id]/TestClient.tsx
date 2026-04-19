@@ -77,64 +77,90 @@ export default function TestClient({ test, questions }: { test: any, questions: 
   const options = q.options ? JSON.parse(q.options) : [];
 
   return (
-    <div style={{ maxWidth: '800px', margin: '0 auto', background: 'var(--bg-secondary)', padding: '2rem', borderRadius: 'var(--border-radius-lg)', boxShadow: 'var(--shadow-md)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem' }}>
-        <h2>{test.title}</h2>
-        <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: timeLeft < 60 ? 'var(--accent-danger)' : 'var(--text-primary)' }}>
+    <div className="max-w-3xl mx-auto bg-card border border-border/50 p-4 md:p-8 rounded-2xl shadow-xl sidebar-glow">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-border/50">
+        <h2 className="text-xl md:text-2xl font-bold text-foreground line-clamp-1">{test.title}</h2>
+        <div className={cn(
+          "text-2xl md:text-3xl font-mono font-black tabular-nums transition-colors px-3 py-1 rounded-lg bg-secondary/50",
+          timeLeft < 60 ? "text-destructive animate-pulse" : "text-primary"
+        )}>
           {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
         </div>
       </div>
 
-      <div style={{ marginBottom: '2rem' }}>
-        <p style={{ fontWeight: 'bold', color: 'var(--text-muted)', marginBottom: '1rem' }}>Question {currentIdx + 1} of {questions.length}</p>
-        <h3 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>{q.questionText}</h3>
+      <div className="mb-8">
+        <div className="flex justify-between items-end mb-4">
+          <p className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+            Question <span className="text-foreground">{currentIdx + 1}</span> of {questions.length}
+          </p>
+          <div className="h-1.5 w-24 md:w-32 bg-secondary rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary transition-all duration-300" 
+              style={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}
+            />
+          </div>
+        </div>
         
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <h3 className="text-xl md:text-2xl mb-6 font-semibold leading-relaxed">{q.questionText}</h3>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
           {options.map((opt: string, idx: number) => (
             <button
               key={idx}
               onClick={() => handleOptionSelect(q.id, opt)}
-              style={{
-                textAlign: 'left',
-                padding: '1rem',
-                borderRadius: 'var(--border-radius-md)',
-                border: `2px solid ${answers[q.id] === opt ? 'var(--brand-primary)' : 'var(--border-light)'}`,
-                background: answers[q.id] === opt ? 'rgba(59, 130, 246, 0.1)' : 'transparent',
-                cursor: 'pointer',
-                fontSize: '1.1rem'
-              }}
+              className={cn(
+                "group relative text-left p-4 md:p-5 rounded-xl border-2 transition-all duration-200 active:scale-[0.98]",
+                answers[q.id] === opt 
+                  ? "border-primary bg-primary/10 ring-2 ring-primary/20 shadow-lg shadow-primary/5" 
+                  : "border-border/50 bg-secondary/30 hover:bg-secondary/50 hover:border-border"
+              )}
             >
-              {opt}
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors",
+                  answers[q.id] === opt ? "border-primary bg-primary" : "border-muted-foreground/30"
+                )}>
+                  {answers[q.id] === opt && <div className="w-2 h-2 rounded-full bg-white" />}
+                </div>
+                <span className={cn(
+                   "text-base md:text-lg font-medium",
+                   answers[q.id] === opt ? "text-foreground" : "text-muted-foreground group-hover:text-foreground"
+                )}>
+                  {opt}
+                </span>
+              </div>
             </button>
           ))}
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-light)', paddingTop: '1.5rem' }}>
-        <button 
+      <div className="flex flex-col sm:flex-row justify-between gap-4 pt-6 border-t border-border/50">
+        <Button 
+          variant="outline"
           onClick={() => setCurrentIdx(prev => Math.max(0, prev - 1))}
           disabled={currentIdx === 0}
-          style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--border-light)', background: 'transparent', cursor: currentIdx === 0 ? 'not-allowed' : 'pointer' }}
+          className="order-2 sm:order-1 h-11 md:h-12 px-6 md:px-8 border-border/50 hover:bg-secondary"
         >
           Previous
-        </button>
+        </Button>
         
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <button 
+        <div className="flex items-center gap-3 order-1 sm:order-2 w-full sm:w-auto">
+          <Button 
+            variant="destructive"
             onClick={() => handleSubmit()}
             disabled={submitting}
-            style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--border-radius-md)', border: 'none', background: 'var(--accent-danger)', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}
+            className="flex-1 sm:flex-none h-11 md:h-12 px-6 md:px-8 font-bold shadow-lg shadow-destructive/20"
           >
-            {submitting ? 'Submitting...' : 'Submit Test'}
-          </button>
+            {submitting ? 'Submitting...' : 'End Test'}
+          </Button>
 
-          <button 
+          <Button 
             onClick={() => setCurrentIdx(prev => Math.min(questions.length - 1, prev + 1))}
             disabled={currentIdx === questions.length - 1}
-            style={{ padding: '0.75rem 1.5rem', borderRadius: 'var(--border-radius-md)', border: 'none', background: 'var(--brand-primary)', color: 'white', cursor: currentIdx === questions.length - 1 ? 'not-allowed' : 'pointer' }}
+            className="flex-1 sm:flex-none h-11 md:h-12 px-6 md:px-10 gradient-brand hover:opacity-90 border-0 text-white font-bold shadow-lg shadow-primary/20"
           >
             Next
-          </button>
+          </Button>
         </div>
       </div>
     </div>

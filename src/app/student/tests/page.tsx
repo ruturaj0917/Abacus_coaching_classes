@@ -28,29 +28,29 @@ export default async function AvailableTests() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Available Tests</h1>
-        <div className="flex items-center gap-2">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Available Tests</h1>
+        <div className="flex flex-wrap items-center gap-2">
           <Badge variant="info">{user.classType?.replace("_", " ")}</Badge>
           <Badge variant="secondary">Level {user.level}</Badge>
-          <span className="text-muted-foreground text-sm ml-2">
+          <span className="text-muted-foreground text-xs md:text-sm">
             {tests.length} test{tests.length !== 1 ? "s" : ""} available
           </span>
         </div>
       </div>
 
       {tests.length === 0 ? (
-        <Card className="border-border/50 bg-card/60 text-center py-16">
+        <Card className="border-border/50 bg-card/60 text-center py-12 md:py-16">
           <CardContent>
-            <FileQuestion className="w-16 h-16 mx-auto mb-4 text-muted-foreground/30" />
-            <h3 className="text-lg font-semibold text-foreground mb-2">No tests available</h3>
-            <p className="text-muted-foreground text-sm">
+            <FileQuestion className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 text-muted-foreground/30" />
+            <h3 className="text-base md:text-lg font-semibold text-foreground mb-2">No tests available</h3>
+            <p className="text-muted-foreground text-xs md:text-sm">
               No tests found for {user.classType?.replace("_", " ")} Level {user.level}.<br />
               Your instructor will add tests soon.
             </p>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 pb-8">
           {tests.map(t => {
             const isTaken = takenTestIds.has(t.id);
             return (

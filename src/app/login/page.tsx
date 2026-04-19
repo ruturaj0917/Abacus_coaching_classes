@@ -81,13 +81,13 @@ export default function LoginPage() {
             <span className="font-bold text-lg text-foreground">Gururaj Coaching Classes</span>
           </div>
 
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Welcome back</h2>
-            <p className="text-muted-foreground">Sign in to your account to continue</p>
+          <div className="mb-6 md:mb-8 text-center lg:text-left">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Welcome back</h2>
+            <p className="text-muted-foreground text-sm md:text-base">Sign in to your account to continue</p>
           </div>
 
           <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-2xl">
-            <CardContent className="pt-6">
+            <CardContent className="pt-6 p-4 md:p-6">
               <form onSubmit={handleLogin} className="space-y-5">
                 {error && (
                   <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-destructive text-sm">
