@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum ClassType {
+  ABACUS
+  VEDIC_MATHS
+}
+
+model User {
+  id          String      @id @default(uuid())
+  name        String
+  email       String      @unique
+  password    String
+  role        Role        @default(STUDENT)
+  
+  // Student specific fields
+  age         Int?
+  classType   ClassType?
+  level       Int?        @default(0) // 0-5
+  
+  // Ranking fields updated after tests
+  globalRank  Int?
+  classRank   Int?
+  levelRank   Int?
+  rankingScore Float?     @default(0)
+  
+  testResults TestResult[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Test {
+  id          String      @id @default(uuid())
+  title       String
+  classType   ClassType
+  level       Int         // 0-5
+  timeLimit   Int         // Time limit in minutes
+  
+  questions   Question[]
+  results     TestResult[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Question {
+  id            String    @id @default(uuid())
+  testId        String
+  test          Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  questionText  String
+  correctAnswer String
+  options       String?   // JSON string if multiple choice
+  
+  createdAt     DateTime  @default(now())
+}
+
+model TestResult {
+  id          String    @id @default(uuid())
+  studentId   String
+  testId      String
+  marks       Float
+  accuracy    Float     // Percentage
+  timeTaken   Int       // Time taken in seconds
+  
+  student     User      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  test        Test      @relation(fields: [testId], references: [id], onDelete: Cascade)
+  
+  createdAt   DateTime  @default(now())
+}
